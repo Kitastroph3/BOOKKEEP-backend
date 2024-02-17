@@ -1,5 +1,8 @@
+// backend/controllers/bookController
+
 const asyncHandler = require('express-async-handler');
 const Book = require('../models/book');
+const Note = require('../models/note');
 
 // Get all saved books for a user
 const showSavedBooks = asyncHandler(async (req, res) => {
@@ -40,7 +43,8 @@ const deleteSavedBook = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
         await Book.findByIdAndDelete(id);
-        res.status(200).json({ message: 'Book deleted successfully' });
+        await Note.deleteMany({ book: id });
+        res.status(200).json({ message: 'Book and notes deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Failed to delete book' });
     }
