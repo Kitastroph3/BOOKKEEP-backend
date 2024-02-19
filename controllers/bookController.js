@@ -12,11 +12,12 @@ const showSavedBooks = asyncHandler(async (req, res) => {
 
 // Save a book for a user
 const saveBook = asyncHandler(async (req, res) => {
-    const { title, author, key, coverImage } = req.body;
+    const { title, author, key, coverImage, desc } = req.body;
     try {
         // Check if a book with the same key already exists for the user
         const existingBook = await Book.findOne({ key, user: req.user.id });
         if (existingBook) {
+            console.log("Book already Saved")
             return res.status(400).json({ message: 'Book already exists in reading list' });
         }
 
@@ -26,6 +27,7 @@ const saveBook = asyncHandler(async (req, res) => {
             author,
             key,
             coverImage,
+            desc,
             user: req.user.id
         });
 
